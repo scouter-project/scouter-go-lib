@@ -51,12 +51,14 @@ func (out *DataOutputX) WriteUInt64(value uint64) *DataOutputX {
 
 //WriteInt8 write int8 number to buffer
 func (out *DataOutputX) WriteInt8(value int8) *DataOutputX {
+	out.written++
 	binary.Write(out.buffer, binary.BigEndian, value)
 	return out
 }
 
 // WriteFloat32 writes float32 value to buffer
 func (out *DataOutputX) WriteFloat32(value float32) *DataOutputX {
+	out.written += 4
 	binary.Write(out.buffer, binary.BigEndian, value)
 	return out
 }
@@ -110,17 +112,23 @@ func (out *DataOutputX) writeBlob(value []byte) {
 	} else {
 		if valueLen <= 253 {
 			out.WriteByte(byte(valueLen))
-			out.buffer.Write(value)
+			out.write(value)
 		} else if valueLen <= 65535 {
 			out.WriteByte(255)
 			out.WriteInt16(int16(valueLen))
-			out.buffer.Write(value)
+			out.write(value)
 		} else {
 			out.WriteByte(254)
 			out.WriteInt32(int32(valueLen))
-			out.buffer.Write(value)
+			out.write(value)
 		}
 	}
+
+}
+
+func (out *DataOutputX) write(value []byte) {
+	out.written += len(value)
+	out.buffer.Write(value)
 
 }
 
@@ -152,4 +160,14 @@ func (out *DataOutputX) WriteBoolean(value bool) {
 	} else {
 		out.buffer.WriteByte(0)
 	}
+}
+
+// Size returns written size
+func (out *DataOutputX) Size() int {
+	return out.written
+}
+
+// GetWriteSize returns written size
+func (out *DataOutputX) GetWriteSize() int {
+	return out.written
 }
