@@ -112,21 +112,21 @@ func (out *DataOutputX) writeBlob(value []byte) {
 	} else {
 		if valueLen <= 253 {
 			out.WriteByte(byte(valueLen))
-			out.write(value)
+			out.Write(value)
 		} else if valueLen <= 65535 {
 			out.WriteByte(255)
 			out.WriteInt16(int16(valueLen))
-			out.write(value)
+			out.Write(value)
 		} else {
 			out.WriteByte(254)
 			out.WriteInt32(int32(valueLen))
-			out.write(value)
+			out.Write(value)
 		}
 	}
 
 }
 
-func (out *DataOutputX) write(value []byte) {
+func (out *DataOutputX) Write(value []byte) {
 	out.written += len(value)
 	out.buffer.Write(value)
 
