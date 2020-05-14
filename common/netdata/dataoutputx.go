@@ -9,7 +9,7 @@ import (
 
 // A DataOutputX is a output stream which used write various kinds of data.
 type DataOutputX struct {
-	written int // the wrtten bytes.
+	written int32 // the wrtten bytes.
 	buffer  *bytes.Buffer
 }
 
@@ -99,13 +99,14 @@ func (out *DataOutputX) WriteString(value string) *DataOutputX {
 	if len == 0 {
 		out.WriteByte(0)
 	} else {
-		out.writeBlob([]byte(value))
+		out.WriteBlob([]byte(value))
 	}
 	//out.buffer.WriteString(value)
 	return out
 }
 
-func (out *DataOutputX) writeBlob(value []byte) {
+// WriteBlob writes byte array to buffer
+func (out *DataOutputX) WriteBlob(value []byte) {
 	valueLen := len(value)
 	if valueLen == 0 {
 		out.WriteByte(0)
@@ -127,7 +128,7 @@ func (out *DataOutputX) writeBlob(value []byte) {
 }
 
 func (out *DataOutputX) Write(value []byte) {
-	out.written += len(value)
+	out.written += int32(len(value))
 	out.buffer.Write(value)
 
 }
@@ -163,11 +164,11 @@ func (out *DataOutputX) WriteBoolean(value bool) {
 }
 
 // Size returns written size
-func (out *DataOutputX) Size() int {
+func (out *DataOutputX) Size() int32 {
 	return out.written
 }
 
 // GetWriteSize returns written size
-func (out *DataOutputX) GetWriteSize() int {
+func (out *DataOutputX) GetWriteSize() int32 {
 	return out.written
 }

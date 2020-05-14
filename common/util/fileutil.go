@@ -1,6 +1,8 @@
 package util
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+)
 
 //ReadFile returns file contents to string
 func ReadFile(file string) string {
