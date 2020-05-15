@@ -13,16 +13,17 @@ import (
 
 //UDPClient is a upp socket client
 type UDPClient struct {
-	Conn *net.UDPConn
-	address string
-	port int32
+	Conn          *net.UDPConn
+	remoteAddress string
+	remotePort    int32
 
 }
 var udpMaxBytes int32 = 60000
 var objhash int32
+var liveSocket *list.List = list.New()
 //NewUDPClient returns new udpclient instance
-func New(addr string , p int32) *UDPClient {
-	udpclient := &UDPClient{address: addr, port : p}
+func New(addr string , port int32) *UDPClient {
+	udpclient := &UDPClient{remoteAddress: addr, remotePort: port}
 	udpclient.open()
 	return udpclient
 }
@@ -39,7 +40,7 @@ func (udpClient *UDPClient) open() error {
 		udpClient.close()
 	}
 
-	address := udpClient.address + ":" + strconv.FormatInt(int64(udpClient.port), 10)
+	address := udpClient.remoteAddress + ":" + strconv.FormatInt(int64(udpClient.remotePort), 10)
 	s, err := net.ResolveUDPAddr("udp", address)
 
 	if err != nil {
