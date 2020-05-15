@@ -93,6 +93,12 @@ func (out *DataOutputX) WriteValue(value Value) *DataOutputX {
 	return out
 }
 
+func (out *DataOutputX) WritePack(pack Pack) *DataOutputX {
+	out.WriteByte(pack.GetPackType())
+	pack.Write(out)
+	return out
+}
+
 // WriteString writes string value to buffer
 func (out *DataOutputX) WriteString(value string) *DataOutputX {
 	len := len(value)
@@ -135,6 +141,7 @@ func (out *DataOutputX) Write(value []byte) {
 
 // WriteByte writes byte value to buffer
 func (out *DataOutputX) WriteByte(value byte) *DataOutputX {
+	out.written++
 	out.buffer.WriteByte(value)
 	return out
 }
