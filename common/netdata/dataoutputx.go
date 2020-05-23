@@ -68,7 +68,7 @@ func (out *DataOutputX) WriteInt8(value int8) *DataOutputX {
 	return out
 }
 
-//WriteInt8 write int8 number to buffer
+//WriteUInt8 write int8 number to buffer
 func (out *DataOutputX) WriteUInt8(value uint8) *DataOutputX {
 	out.written++
 	binary.Write(out.writer, binary.BigEndian, value)
