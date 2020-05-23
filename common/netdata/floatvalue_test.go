@@ -6,7 +6,7 @@ import (
 )
 
 func TestFloatValue(t *testing.T) {
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	fvalue := NewFloatValue(124.234)
 	fvalue.Write(out)
 	in := NewDataInputX(out.Bytes())

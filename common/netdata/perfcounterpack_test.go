@@ -20,7 +20,7 @@ func TestPerfCounterPack2(t *testing.T) {
 	pack.Put("ivalue", 123)
 	pack.Put("tvalue", " test value2")
 	pack.Put("bvalue", false)
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	pack.Write(out)
 	in := NewDataInputX(out.Bytes())
 	pack2 := NewPerfCounterPack()

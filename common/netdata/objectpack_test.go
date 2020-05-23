@@ -18,7 +18,7 @@ func TestObjectPack(t *testing.T) {
 	objPack.Tags.Put("key1", "test")
 	fmt.Printf("%s\n", objPack.ToString())
 
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	objPack.Write(out)
 	in := NewDataInputX(out.Bytes())
 	objPack2 := NewObjectPack2()

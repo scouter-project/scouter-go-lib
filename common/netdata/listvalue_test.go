@@ -34,7 +34,7 @@ func TestListValue2(t *testing.T) {
 	listValue.AddInt32(ivalue)
 	listValue.AddInt64(lvalue)
 	listValue.AddString(tvalue)
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	listValue.Write(out)
 	in := NewDataInputX(out.Bytes())
 

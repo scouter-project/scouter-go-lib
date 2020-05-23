@@ -32,7 +32,7 @@ func TestMapValue2(t *testing.T) {
 	mapValue.Put("value2", tvalue)
 	mapValue.Put("value3", bvalue)
 
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	mapValue.Write(out)
 
 	in := NewDataInputX(out.Bytes())

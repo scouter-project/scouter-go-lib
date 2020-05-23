@@ -6,8 +6,8 @@ import (
 )
 
 func TestDataOutputX(t *testing.T) {
-	out := NewDataOutputX()
-	out.WriteByte(100)
+	out := NewDataOutputX(nil)
+	out.WriteInt8(100)
 	out.WriteInt8(1)
 	out.WriteInt16(13245)
 	out.WriteInt32(20022222)
@@ -19,7 +19,7 @@ func TestDataOutputX(t *testing.T) {
 	out.WriteBoolean(true)
 
 	in := NewDataInputX(out.Bytes())
-	fmt.Printf("byte value: %d \n", in.ReadByte())
+	fmt.Printf("byte value: %d \n", in.ReadInt8())
 	fmt.Printf("int8 value: %d \n", in.ReadInt8())
 	fmt.Printf("int16 value: %d \n", in.ReadInt16())
 	fmt.Printf("int value: %d \n", in.ReadInt32())

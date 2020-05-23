@@ -5,7 +5,7 @@ import (
 )
 
 func TestBooleanVale(t *testing.T) {
-	out := NewDataOutputX()
+	out := NewDataOutputX(nil)
 	bvalue := NewBooleanValue(true)
 	bvalue.Write(out)
 	in := NewDataInputX(out.Bytes())
