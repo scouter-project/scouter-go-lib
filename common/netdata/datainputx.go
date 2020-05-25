@@ -8,6 +8,7 @@ import (
 
 // DataInputX is a byte buffer read stream struct
 type DataInputX struct {
+	offset int32
 	reader io.Reader
 }
 
@@ -29,6 +30,7 @@ func NewDataInputX(any interface{}) *DataInputX {
 
 // ReadInt8 returns int8 value
 func (in *DataInputX) ReadInt8() int8 {
+	in.offset++
 	var value int8
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -37,6 +39,7 @@ func (in *DataInputX) ReadInt8() int8 {
 	return value
 }
 func (in *DataInputX) ReadUInt8() uint8 {
+	in.offset++
 	var value uint8
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -48,6 +51,7 @@ func (in *DataInputX) ReadUInt8() uint8 {
 
 // ReadInt16 returns int16 value
 func (in *DataInputX) ReadInt16() int16 {
+	in.offset += 2
 	var value int16
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -58,6 +62,7 @@ func (in *DataInputX) ReadInt16() int16 {
 
 // ReadInt32 returns int16 value
 func (in *DataInputX) ReadInt32() int32 {
+	in.offset += 4
 	var value int32
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -68,6 +73,7 @@ func (in *DataInputX) ReadInt32() int32 {
 
 // ReadInt64 returns int16 value
 func (in *DataInputX) ReadInt64() int64 {
+	in.offset +=8
 	var value int64
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -78,6 +84,7 @@ func (in *DataInputX) ReadInt64() int64 {
 
 // ReadFloat32 returns float32 value
 func (in *DataInputX) ReadFloat32() float32 {
+	in.offset +=4
 	var value float32
 	err := binary.Read(in.reader, binary.BigEndian, &value)
 	if err != nil {
@@ -106,6 +113,7 @@ func (in *DataInputX) readBlob() []byte {
 	default:
 		len = int32(baseLen)
 	}
+	in.offset += len
 	val := make([]byte,len)
 	_, err := in.reader.Read(val)
 	if err != nil {
@@ -150,3 +158,22 @@ func (in *DataInputX) ReadValue() Value {
 	return value.Read(in)
 
 }
+
+func (in *DataInputX) ReadIntBytes() []byte {
+	len := in.ReadInt32()
+	val := make([]byte,len)
+	_, err := in.reader.Read(val)
+	if err != nil {
+		val = []byte{}
+	}
+	return val
+}
+
+func (in *DataInputX) ReadPack() Pack {
+	packType := in.ReadInt8()
+	pack := CreatePack(byte(packType))
+	pack.Read(in)
+	return pack
+
+}
+

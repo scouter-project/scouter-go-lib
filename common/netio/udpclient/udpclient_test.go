@@ -54,3 +54,9 @@ func TestSendList(t *testing.T) {
 
 	udpclient.WriteBufferList(packList)
 }
+
+func TestDataOutput(t *testing.T) {
+	udpclient := New("127.0.0.1",6100)
+	out := netdata.NewDataOutputX(udpclient.Conn)
+	out.WriteInt32(123344)
+}
