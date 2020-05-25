@@ -15,7 +15,7 @@ func TestUDPClient(t *testing.T) {
 	perfPack.ObjName = "testObj"
 	perfPack.Time = time.Now().Unix()
 	perfPack.Timetype = timeconstants.REALTIME
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	out.WritePack(perfPack)
 	udpclient.WriteBuffer(out.Bytes())
 
@@ -30,7 +30,7 @@ func TestMultiPacket(t *testing.T) {
 	perfPack.ObjName = "testObj"
 	perfPack.Time = time.Now().Unix()
 	perfPack.Timetype = timeconstants.REALTIME
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	out.WritePack(perfPack)
 	udpclient.WriteBuffer(out.Bytes())
 }
@@ -44,7 +44,7 @@ func TestSendList(t *testing.T) {
 	perfPack.ObjName = "testObj"
 	perfPack.Time = time.Now().Unix()
 	perfPack.Timetype = timeconstants.REALTIME
-	packList.PushFront(netdata.NewDataOutputX().WritePack(perfPack).Bytes())
+	packList.PushFront(netdata.NewDataOutputX(nil).WritePack(perfPack).Bytes())
 
 	perfPack = netdata.NewPerfCounterPack()
 	perfPack.Put("key2", 456)

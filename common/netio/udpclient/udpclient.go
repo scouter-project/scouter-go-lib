@@ -82,7 +82,7 @@ func (udpClient *UDPClient) writeMTU(data []byte, packetSize int32) bool {
 }
 
 func (udpClient *UDPClient) writeMTUSub(pkid int64, total int32, num int32, data []byte) {
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	out.Write(netcafeconstant.CAFE_MTU)
 	out.WriteInt32(objhash)
 	out.WriteInt64(pkid)
@@ -95,7 +95,7 @@ func (udpClient *UDPClient) writeMTUSub(pkid int64, total int32, num int32, data
 }
 
 func (udpClient *UDPClient) sendBufferList(bufferCount int16, data []byte) {
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	out.Write(netcafeconstant.CAFE_N)
 	out.WriteInt16(bufferCount)
 	out.Write(data)
@@ -112,7 +112,7 @@ func (udpClient *UDPClient) WriteBuffer(buff []byte) bool {
 	if int32(len(buff)) > udpMaxBytes {
 		return udpClient.writeMTU(buff, udpMaxBytes)
 	}
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	out.Write(netcafeconstant.CAFE)
 	out.Write(buff)
 
@@ -124,7 +124,7 @@ func (udpClient *UDPClient) WriteBufferList(valueList list.List) bool {
 	if udpClient.Conn == nil {
 		return false
 	}
-	out := netdata.NewDataOutputX()
+	out := netdata.NewDataOutputX(nil)
 	var outCount int16
 	for i := 0; i < valueList.Len(); i++ {
 		b := valueList.Front().Value.([]byte)
@@ -133,7 +133,7 @@ func (udpClient *UDPClient) WriteBufferList(valueList list.List) bool {
 			udpClient.writeMTU(b, udpMaxBytes)
 		} else if buffLen+out.GetWriteSize() > udpMaxBytes {
 			udpClient.sendBufferList(outCount, out.Bytes())
-			out = netdata.NewDataOutputX()
+			out = netdata.NewDataOutputX(nil)
 			outCount = 1
 			out.Write(b)
 		} else {
