@@ -8,7 +8,7 @@ import (
 func ReadFile(file string) string {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		panic(err)
+		return ""
 	}
 	return string(data)
 }

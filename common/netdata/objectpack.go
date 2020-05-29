@@ -37,6 +37,8 @@ type ObjectPack struct {
 func NewObjectPack() *ObjectPack {
 	pack := new(ObjectPack)
 	pack.Tags = NewMapValue()
+	pack.Alive = true
+
 	return pack
 }
 
@@ -45,6 +47,7 @@ func NewObjectPack2() *ObjectPack2 {
 	pack := new(ObjectPack2)
 	pack.Tags = NewMapValue()
 	pack.SiteID = "Default"
+	pack.Alive = true
 	return pack
 }
 
@@ -56,6 +59,7 @@ func (objectPack *ObjectPack2) Write(out *DataOutputX) {
 	out.WriteString(objectPack.Address)
 	out.WriteString(objectPack.Version)
 	out.WriteBoolean(objectPack.Alive)
+	out.WriteDecimal(objectPack.Wakeup)
 	out.WriteInt8(objectPack.Family)
 	out.WriteValue(objectPack.Tags)
 
@@ -68,6 +72,7 @@ func (objectPack *ObjectPack) Write(out *DataOutputX) {
 	out.WriteString(objectPack.Address)
 	out.WriteString(objectPack.Version)
 	out.WriteBoolean(objectPack.Alive)
+	out.WriteDecimal(objectPack.Wakeup)
 	out.WriteInt8(objectPack.Family)
 	out.WriteValue(objectPack.Tags)
 
@@ -81,6 +86,7 @@ func (objectPack *ObjectPack2) Read(in *DataInputX) Pack {
 	objectPack.Address = in.ReadString()
 	objectPack.Version = in.ReadString()
 	objectPack.Alive = in.ReadBoolean()
+	objectPack.Wakeup = in.ReadDecimal()
 	objectPack.Family = in.ReadInt8()
 	objectPack.Tags = in.ReadValue().(*MapValue)
 
@@ -93,6 +99,7 @@ func (objectPack *ObjectPack) Read(in *DataInputX) Pack {
 	objectPack.Address = in.ReadString()
 	objectPack.Version = in.ReadString()
 	objectPack.Alive = in.ReadBoolean()
+	objectPack.Wakeup = in.ReadDecimal()
 	objectPack.Family = in.ReadInt8()
 	objectPack.Tags = in.ReadValue().(*MapValue)
 

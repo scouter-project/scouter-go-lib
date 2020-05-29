@@ -30,9 +30,6 @@ func NewDataOutputX(any interface{}) *DataOutputX {
 	return out
 }
 
-
-
-
 // WriteInt32 write int32 number to buffer.
 func (out *DataOutputX) WriteInt32(value int32) *DataOutputX {
 	out.written += 4
@@ -158,10 +155,9 @@ func (out *DataOutputX) Write(value []byte) {
 
 }
 
-
 // Bytes returns buffer's bytes
 func (out *DataOutputX) Bytes() []byte {
-	switch v:= out.writer.(type) {
+	switch v := out.writer.(type) {
 	case *bytes.Buffer:
 		return v.Bytes()
 	default:

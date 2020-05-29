@@ -15,32 +15,29 @@ import (
 type UDPClient struct {
 	Conn          *net.UDPConn
 	remoteAddress string
-	remotePort    int32
-
+	remotePort    int
+	udpMaxBytes   int
 }
-var udpMaxBytes int32 = 60000
-var objhash int32
-var liveSocket *list.List = list.New()
+
 //NewUDPClient returns new udpclient instance
-func New(addr string , port int32) *UDPClient {
+func New(addr string , port int) *UDPClient {
 	udpclient := &UDPClient{remoteAddress: addr, remotePort: port}
 	udpclient.open()
+	udpclient.udpMaxBytes = 60000
 	return udpclient
 }
 
-func SetUDPMaxBytes (max int32) {
-	udpMaxBytes = max
+func (udpClient *UDPClient) SetUDPMaxBytes (max int) {
+	udpClient.udpMaxBytes = max
 }
 
-func SetObjHash (hash int32) {
-	objhash = hash
-}
+
 func (udpClient *UDPClient) open() error {
 	if udpClient.Conn != nil {
 		udpClient.close()
 	}
 
-	address := udpClient.remoteAddress + ":" + strconv.FormatInt(int64(udpClient.remotePort), 10)
+	address := udpClient.remoteAddress + ":" + strconv.Itoa(udpClient.remotePort)
 	s, err := net.ResolveUDPAddr("udp", address)
 
 	if err != nil {
@@ -60,31 +57,31 @@ func (udpClient *UDPClient) close() {
 }
 
 
-func (udpClient *UDPClient) writeMTU(data []byte, packetSize int32) bool {
+func (udpClient *UDPClient) writeMTU(data []byte, packetSize int) bool {
 	if udpClient.Conn == nil {
 		return false
 	}
 	pkid := keygen.Next()
-	total := int32(len(data)) / packetSize
-	remainder := int32(len(data)) % packetSize
+	total := len(data) / packetSize
+	remainder := len(data) % packetSize
 	if remainder > 0 {
 		total++
 	}
-	var num int32
+	var num int
 
 	for num = 0; num < total; num++ {
-		udpClient.writeMTUSub(pkid, total, int32(num),  util.CopyArray(data, num*packetSize, packetSize))
+		udpClient.writeMTUSub(pkid, total, num,  util.CopyArray(data, num*packetSize, packetSize))
 	}
 	if remainder > 0 {
-		udpClient.writeMTUSub(pkid, total, int32(num),  util.CopyArray(data, int32(len(data))-remainder, remainder))
+		udpClient.writeMTUSub(pkid, total, num,  util.CopyArray(data, len(data)-remainder, remainder))
 	}
 	return true
 }
 
-func (udpClient *UDPClient) writeMTUSub(pkid int64, total int32, num int32, data []byte) {
+func (udpClient *UDPClient) writeMTUSub(pkid int64, total int, num int, data []byte) {
 	out := netdata.NewDataOutputX(nil)
 	out.Write(netcafeconstant.CAFE_MTU)
-	out.WriteInt32(objhash)
+	out.WriteInt32(0) // In deed, this value is objhash.. but i don't use objhash anymore.
 	out.WriteInt64(pkid)
 	out.WriteInt16(int16(total))
 	out.WriteInt16(int16(num))
@@ -109,8 +106,8 @@ func (udpClient *UDPClient) WriteBuffer(buff []byte) bool {
 	if udpClient.Conn == nil {
 		return false
 	}
-	if int32(len(buff)) > udpMaxBytes {
-		return udpClient.writeMTU(buff, udpMaxBytes)
+	if len(buff) > udpClient.udpMaxBytes {
+		return udpClient.writeMTU(buff, udpClient.udpMaxBytes)
 	}
 	out := netdata.NewDataOutputX(nil)
 	out.Write(netcafeconstant.CAFE)
@@ -120,18 +117,18 @@ func (udpClient *UDPClient) WriteBuffer(buff []byte) bool {
 	return true
 }
 
-func (udpClient *UDPClient) WriteBufferList(valueList list.List) bool {
+func (udpClient *UDPClient) WriteBufferList(bufferList *list.List) bool {
 	if udpClient.Conn == nil {
 		return false
 	}
 	out := netdata.NewDataOutputX(nil)
 	var outCount int16
-	for i := 0; i < valueList.Len(); i++ {
-		b := valueList.Front().Value.([]byte)
-		buffLen := int32(len(b))
-		if buffLen > udpMaxBytes {
-			udpClient.writeMTU(b, udpMaxBytes)
-		} else if buffLen+out.GetWriteSize() > udpMaxBytes {
+	for buffer:= bufferList.Front(); buffer != nil; buffer = buffer.Next() {
+		b := buffer.Value.([]byte)
+		buffLen := len(b)
+		if buffLen > udpClient.udpMaxBytes {
+			udpClient.writeMTU(b, udpClient.udpMaxBytes)
+		} else if buffLen+ int(out.GetWriteSize()) > udpClient.udpMaxBytes {
 			udpClient.sendBufferList(outCount, out.Bytes())
 			out = netdata.NewDataOutputX(nil)
 			outCount = 1
