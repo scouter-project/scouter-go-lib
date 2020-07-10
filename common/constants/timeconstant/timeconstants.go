@@ -7,4 +7,5 @@ const (
 	TEN_MIN  int8 = 4
 	HOUR     int8 = 5
 	DAY      int8 = 6
+	SNAPSHOT int8 = 7
 )
