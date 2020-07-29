@@ -6,6 +6,6 @@ const (
 	MAP         byte = 10
 	PERFCOUNTER byte = 60
 	OBJECT      byte = 80
-	PERFCOUNTER_K8S byte = 61
-	K8S_CLUSTER__INFO byte = 62
+	PERFCOUNTER_K8S byte = 65
+	K8S_CLUSTER__INFO byte = 66
 )

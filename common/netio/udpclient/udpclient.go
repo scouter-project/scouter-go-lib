@@ -69,7 +69,7 @@ func (udpClient *UDPClient) writeMTU(data []byte, packetSize int) bool {
 	}
 	var num int
 
-	for num = 0; num < total; num++ {
+	for num = 0; num < len(data) / packetSize; num++ {
 		udpClient.writeMTUSub(pkid, total, num,  util.CopyArray(data, num*packetSize, packetSize))
 	}
 	if remainder > 0 {

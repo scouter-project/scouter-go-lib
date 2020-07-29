@@ -15,6 +15,7 @@ type PerfCounterK8SPack struct {
 	DeploymentName string
 	PodName string
 	ContainerName string
+	ObjName string
 	Timetype int8
 	MetricLevel int8
 	Data     *MapValue
@@ -38,6 +39,7 @@ func (pack *PerfCounterK8SPack) Write(out *DataOutputX) {
 	out.WriteString(pack.DeploymentName)
 	out.WriteString(pack.PodName)
 	out.WriteString(pack.ContainerName)
+	out.WriteString(pack.ObjName)
 	out.WriteInt8(pack.Timetype)
 	out.WriteInt8(pack.MetricLevel)
 	out.WriteValue(pack.Data)
@@ -54,6 +56,7 @@ func (pack *PerfCounterK8SPack) Read(in *DataInputX) Pack  {
 	pack.DeploymentName = in.ReadString()
 	pack.PodName = in.ReadString()
 	pack.ContainerName = in.ReadString()
+	pack.ObjName = in.ReadString()
 	pack.Timetype = in.ReadInt8()
 	pack.MetricLevel = in.ReadInt8()
 	pack.Data = in.ReadValue().(*MapValue)
