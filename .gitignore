@@ -11,3 +11,4 @@
 *.out
 *.code-workspace
 *.iml
+.idea

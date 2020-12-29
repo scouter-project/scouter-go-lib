@@ -4,6 +4,8 @@ package packconstants
 const (
 	// M
 	MAP         byte = 10
+	XLOG        byte = 21
+	TEXT        byte = 50
 	PERFCOUNTER byte = 60
 	OBJECT      byte = 80
 	PERFCOUNTER_K8S byte = 65
