@@ -30,6 +30,18 @@ func NewDataOutputX(any interface{}) *DataOutputX {
 	return out
 }
 
+func (out *DataOutputX) WriteInt32Array(values []int32) *DataOutputX {
+	if (values == nil) {
+		out.WriteInt16(0)
+	} else {
+		out.WriteInt16(int16(len(values)))
+		for _, v := range values {
+			out.WriteInt32(v)
+		}
+	}
+	return out
+}
+
 // WriteInt32 write int32 number to buffer.
 func (out *DataOutputX) WriteInt32(value int32) *DataOutputX {
 	out.written += 4
@@ -99,6 +111,22 @@ func (out *DataOutputX) WriteDecimal(value int64) *DataOutputX {
 	return out
 }
 
+func (out *DataOutputX) WriteDecimal32(value int32) *DataOutputX {
+	if value == 0 {
+		out.WriteInt8(0)
+	} else if value >= math.MinInt8 && value <= math.MaxInt8 {
+		out.WriteInt8(1)
+		out.WriteInt8(int8(value))
+	} else if value >= math.MinInt16 && value <= math.MaxInt16 {
+		out.WriteInt8(2)
+		out.WriteInt16(int16(value))
+	} else if value >= math.MinInt32 && value <= math.MaxInt32 {
+		out.WriteInt8(4)
+		out.WriteInt32(int32(value))
+	}
+	return out
+}
+
 // WriteValue wtires value type to buffer
 func (out *DataOutputX) WriteValue(value Value) *DataOutputX {
 	if value == nil {
@@ -114,6 +142,13 @@ func (out *DataOutputX) WritePack(pack Pack) *DataOutputX {
 	pack.Write(out)
 	return out
 }
+
+func (out *DataOutputX) WriteStep(step Step) *DataOutputX {
+	out.WriteUInt8(uint8(step.GetStepType()))
+	step.Write(out)
+	return out
+}
+
 
 // WriteString writes string value to buffer
 func (out *DataOutputX) WriteString(value string) *DataOutputX {
@@ -157,6 +192,9 @@ func (out *DataOutputX) Write(value []byte) {
 
 // Bytes returns buffer's bytes
 func (out *DataOutputX) Bytes() []byte {
+	if out == nil {
+		return nil
+	}
 	switch v := out.writer.(type) {
 	case *bytes.Buffer:
 		return v.Bytes()
