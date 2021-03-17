@@ -29,7 +29,6 @@ type ObjectPack struct {
 	Version string
 	Alive   bool
 	Wakeup  int64
-	Family  int8
 	Tags    *MapValue
 }
 
@@ -54,7 +53,7 @@ func NewObjectPack2() *ObjectPack2 {
 func (objectPack *ObjectPack2) Write(out *DataOutputX) {
 	out.WriteString(objectPack.SiteID)
 	out.WriteString(objectPack.ObjType)
-	out.WriteDecimal(int64(objectPack.ObjHash))
+	out.WriteDecimal32(objectPack.ObjHash)
 	out.WriteString(objectPack.ObjName)
 	out.WriteString(objectPack.Address)
 	out.WriteString(objectPack.Version)
@@ -67,13 +66,12 @@ func (objectPack *ObjectPack2) Write(out *DataOutputX) {
 
 func (objectPack *ObjectPack) Write(out *DataOutputX) {
 	out.WriteString(objectPack.ObjType)
-	out.WriteDecimal(int64(objectPack.ObjHash))
+	out.WriteDecimal32(objectPack.ObjHash)
 	out.WriteString(objectPack.ObjName)
 	out.WriteString(objectPack.Address)
 	out.WriteString(objectPack.Version)
 	out.WriteBoolean(objectPack.Alive)
 	out.WriteDecimal(objectPack.Wakeup)
-	out.WriteInt8(objectPack.Family)
 	out.WriteValue(objectPack.Tags)
 
 }
@@ -100,7 +98,6 @@ func (objectPack *ObjectPack) Read(in *DataInputX) Pack {
 	objectPack.Version = in.ReadString()
 	objectPack.Alive = in.ReadBoolean()
 	objectPack.Wakeup = in.ReadDecimal()
-	objectPack.Family = in.ReadInt8()
 	objectPack.Tags = in.ReadValue().(*MapValue)
 
 	return objectPack
@@ -128,7 +125,6 @@ func (objectPack *ObjectPack) ToString() string {
 	str += " hash: " + strconv.FormatInt(int64(objectPack.ObjHash), 10)
 	str += " version: " + objectPack.Version
 	str += " alive: " + strconv.FormatBool(objectPack.Alive)
-	str += " familly: " + strconv.FormatInt(int64(objectPack.Family), 10)
 	str += " tags: " + objectPack.Tags.ToString()
 	return str
 }
