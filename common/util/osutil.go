@@ -7,7 +7,7 @@ import (
 
 // GetAppPath returns current parogram path
 func GetAppPath() (string, error) {
-	c := os.Getenv("TUNA_K8S_AGENT_HOME")
+	c := os.Getenv("app.home")
 	var err error
 	if c == "" {
 		c, err = os.Getwd()
@@ -17,6 +17,7 @@ func GetAppPath() (string, error) {
 	}
 	return c, nil
 }
+
 
 // MakeDir makes dir given path.
 func MakeDir(path string) {
