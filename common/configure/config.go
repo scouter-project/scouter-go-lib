@@ -2,6 +2,7 @@ package configure
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -28,6 +29,14 @@ func NewConfigure(file string) *Configure {
 		configure.LoadEnv()
 		configure.Start()
 	})
+	return configure
+}
+
+func GetConfigure() *Configure {
+	if configure == nil {
+		fmt.Println("configure is nil. Before GetConfigure, call NewConfigure() with config file path)")
+		os.Exit(0)
+	}
 	return configure
 }
 
