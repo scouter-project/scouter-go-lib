@@ -25,3 +25,7 @@ func MillisBetween(from time.Time, to time.Time) int32 {
 func MillisToNow(from time.Time) int32 {
 	return int32(time.Now().Sub(from).Milliseconds())
 }
+
+func TimeIsZero(t time.Time) bool {
+	return t.Year() == 0001 &&  t.Hour() == 0 && t.Second() == 0 && t.Nanosecond() == 0
+}

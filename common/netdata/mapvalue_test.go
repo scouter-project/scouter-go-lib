@@ -43,3 +43,13 @@ func TestMapValue2(t *testing.T) {
 	assert.Equal(t, tvalue, mapValue2.GetString("value2"))
 	assert.Equal(t, bvalue, mapValue2.GetBoolean("value3"))
 }
+
+func TestMapValue3(t *testing.T) {
+	lvalue := NewListValue()
+	lvalue.AddString("aaaa")
+	lvalue.AddString("bbb")
+	mapValue := NewMapValue()
+	mapValue.Put("lvalue",lvalue)
+	l := mapValue.GetListValue("lvalue")
+	fmt.Println(l)
+}

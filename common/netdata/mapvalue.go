@@ -69,6 +69,8 @@ func (mapValue *MapValue) Put(key string, any interface{}) {
 		mapValue.Table[key] = NewBooleanValue(any.(bool))
 	case float32:
 		mapValue.Table[key] = NewFloatValue(any.(float32))
+	case *ListValue:
+		mapValue.Table[key] = any.(*ListValue)
 	case Value:
 		mapValue.Table[key] = any.(Value)
 	}
@@ -128,6 +130,16 @@ func (mapValue *MapValue) GetInt64(key string) int64 {
 	}
 	return 0
 }
+
+
+func (mapValue *MapValue) GetListValue(key string) *ListValue {
+	v, ok := mapValue.Table[key].(*ListValue)
+	if ok {
+		return v
+	}
+	return nil
+}
+
 
 // ToString returns converted string map data
 func (mapValue *MapValue) ToString() string {

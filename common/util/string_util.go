@@ -36,3 +36,20 @@ func ToJsonString(v interface{}) string {
 	}
 	return string(b)
 }
+
+func FindString(slice []string, value string) (int, bool) {
+	for i, item := range slice {
+		if item == value {
+			return i, true
+		}
+
+	}
+	return -1, false
+}
+
+func FindStringAt(slice []string, indx int) (string, bool ) {
+	if len(slice) <= indx {
+		return "", false
+	}
+	return slice[indx], true
+}
