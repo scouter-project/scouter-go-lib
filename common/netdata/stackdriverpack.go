@@ -4,6 +4,7 @@ import packconstants "github.com/scouter-project/scouter-go-lib/common/constants
 
 type StackDriverPack struct {
 	CspName        string
+	Account        string
 	Project        string
 	ResourceType   string
 	MetricName     string
@@ -22,6 +23,7 @@ func NewStackDriverPack() *StackDriverPack {
 // Write will write PerfCounterPack to dataoutputx
 func (pack *StackDriverPack) Write(out *DataOutputX) {
 	out.WriteString(pack.CspName)
+	out.WriteString(pack.Account)
 	out.WriteString(pack.Project)
 	out.WriteString(pack.ResourceType)
 	out.WriteString(pack.MetricName)
@@ -34,6 +36,7 @@ func (pack *StackDriverPack) Write(out *DataOutputX) {
 func (pack *StackDriverPack) Read(in *DataInputX) Pack  {
 	pack.CspName = in.ReadString()
 	pack.Project = in.ReadString()
+	pack.Account = in.ReadString()
 	pack.ResourceType = in.ReadString()
 	pack.MetricName = in.ReadString()
 	pack.CTime = in.ReadInt64()
@@ -42,7 +45,7 @@ func (pack *StackDriverPack) Read(in *DataInputX) Pack  {
 	return pack
 }
 
-// Put will put key/value to PerfCounterPack
+// Put will put key/value to Pack
 func (pack *StackDriverPack) Put(key string, any interface{}) {
 	switch v := any.(type) {
 	case int32:
@@ -66,7 +69,7 @@ func (pack *StackDriverPack) Put(key string, any interface{}) {
 	}
 }
 
-// ToString returns converted perfcounterpack value
+// ToString returns converted pack value
 func (pack *StackDriverPack) ToString() string {
 	str := pack.Data.ToString()
 	return str
