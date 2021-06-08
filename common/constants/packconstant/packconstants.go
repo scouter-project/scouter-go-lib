@@ -17,4 +17,6 @@ const (
 	OBJECT            byte = 80
 	CLOUD_WATCH		  byte = 11
 	XRay			  byte = 12
+	CLOUD_ITEMS       byte = 14
+	STACKDRIVER       byte = 15
 )
