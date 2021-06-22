@@ -8,7 +8,6 @@ type StackDriverPack struct {
 	Project        string
 	ResourceType   string
 	MetricName     string
-	CTime		   int64
 	Filter         *MapValue
 	Data           *MapValue
 }
@@ -20,26 +19,24 @@ func NewStackDriverPack() *StackDriverPack {
 	return pack
 }
 
-// Write will write PerfCounterPack to dataoutputx
+// Write will write Pack to dataoutputx
 func (pack *StackDriverPack) Write(out *DataOutputX) {
 	out.WriteString(pack.CspName)
 	out.WriteString(pack.Account)
 	out.WriteString(pack.Project)
 	out.WriteString(pack.ResourceType)
 	out.WriteString(pack.MetricName)
-	out.WriteInt64(pack.CTime)
 	out.WriteValue(pack.Filter)
 	out.WriteValue(pack.Data)
 }
 
-// Read will read PerfCounterPack from datainputx
+// Read will read Pack from datainputx
 func (pack *StackDriverPack) Read(in *DataInputX) Pack  {
 	pack.CspName = in.ReadString()
-	pack.Project = in.ReadString()
 	pack.Account = in.ReadString()
+	pack.Project = in.ReadString()
 	pack.ResourceType = in.ReadString()
 	pack.MetricName = in.ReadString()
-	pack.CTime = in.ReadInt64()
 	pack.Filter = in.ReadValue().(*MapValue)
 	pack.Data = in.ReadValue().(*MapValue)
 	return pack
