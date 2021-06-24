@@ -12,3 +12,4 @@
 *.code-workspace
 *.iml
 .idea/
+home/log/**
