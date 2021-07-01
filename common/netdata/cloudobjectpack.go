@@ -5,7 +5,6 @@ import packconstants "github.com/scouter-project/scouter-go-lib/common/constants
 type CloudObjectPack struct {
 	ObjHash        int32
 	ObjName        string
-	Csp            string
 	IPaddress      string
 	Port           int32
 	Alive          bool
@@ -23,7 +22,6 @@ func NewCloudObjectPack() *CloudObjectPack {
 func (pack *CloudObjectPack) Write(out *DataOutputX) {
 	out.WriteDecimal32(pack.ObjHash)
 	out.WriteString(pack.ObjName)
-	out.WriteString(pack.Csp)
 	out.WriteString(pack.IPaddress)
 	out.WriteDecimal32(pack.Port)
 	out.WriteBoolean(pack.Alive)
@@ -35,7 +33,6 @@ func (pack *CloudObjectPack) Write(out *DataOutputX) {
 func (pack *CloudObjectPack) Read(in *DataInputX) Pack  {
 	pack.ObjHash = int32(in.ReadDecimal())
 	pack.ObjName = in.ReadString()
-	pack.Csp = in.ReadString()
 	pack.IPaddress = in.ReadString()
 	pack.Port = int32(in.ReadDecimal())
 	pack.Alive = in.ReadBoolean()
