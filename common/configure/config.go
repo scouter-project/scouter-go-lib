@@ -3,6 +3,7 @@ package configure
 import (
 	"bufio"
 	"fmt"
+	"github.com/scouter-project/scouter-go-lib/common/logger"
 	"os"
 	"strconv"
 	"strings"
@@ -86,8 +87,8 @@ func (c *Configure) Get(key string ) string  {
 		return value
 	}
 	return ""
-
 }
+
 func (c *Configure) loadFile() (err error){
 	file, err := os.OpenFile(c.configFile,os.O_RDONLY,os.ModePerm)
 	if err != nil {
@@ -109,6 +110,22 @@ func (c *Configure) loadFile() (err error){
 		}
 	}
 	return  nil
+}
+
+// conf 파일에 파라미터 추가
+func (c *Configure) Append(key string, value string) error {
+	if _, ok := c.confMap[key]; !ok {
+		file, err := os.OpenFile(c.configFile,os.O_APPEND,os.ModePerm)
+		if err != nil {
+			logger.Error.Println("failed open the configuration file - %s", err.Error())
+			return err
+		}
+		defer file.Close()
+		file.WriteString("\n"+key+"="+value)
+		file.Sync()
+		c.Put(key, value)
+	}
+	return nil
 }
 
 // ReadStringValue returns string type config value
@@ -151,8 +168,6 @@ func (c *Configure) loadConfig() {
 	if c.checkFile(c.configFile) {
 		c.loadFile()
 	}
-
-
 }
 
 func (c *Configure) checkFile(filePath string) bool {
