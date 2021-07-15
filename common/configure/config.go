@@ -117,7 +117,6 @@ func (c *Configure) Append(key string, value string) error {
 	if _, ok := c.confMap[key]; !ok {
 		file, err := os.OpenFile(c.configFile,os.O_APPEND,os.ModePerm)
 		if err != nil {
-			logger.Error.Println("failed open the configuration file - %s", err.Error())
 			return err
 		}
 		defer file.Close()
