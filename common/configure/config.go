@@ -3,7 +3,6 @@ package configure
 import (
 	"bufio"
 	"fmt"
-	"github.com/scouter-project/scouter-go-lib/common/logger"
 	"os"
 	"strconv"
 	"strings"
@@ -28,6 +27,7 @@ func NewConfigure(file string) *Configure {
 		configure.filesize = 0
 		configure.confMap = make(map[string]string)
 		configure.LoadEnv()
+		configure.loadFile()
 		configure.Start()
 	})
 	return configure
@@ -87,8 +87,8 @@ func (c *Configure) Get(key string ) string  {
 		return value
 	}
 	return ""
-}
 
+}
 func (c *Configure) loadFile() (err error){
 	file, err := os.OpenFile(c.configFile,os.O_RDONLY,os.ModePerm)
 	if err != nil {
@@ -117,7 +117,6 @@ func (c *Configure) Append(key string, value string) error {
 	if _, ok := c.confMap[key]; !ok {
 		file, err := os.OpenFile(c.configFile,os.O_APPEND,os.ModePerm)
 		if err != nil {
-			logger.Error.Println("failed open the configuration file - %s", err.Error())
 			return err
 		}
 		defer file.Close()
@@ -168,6 +167,8 @@ func (c *Configure) loadConfig() {
 	if c.checkFile(c.configFile) {
 		c.loadFile()
 	}
+
+
 }
 
 func (c *Configure) checkFile(filePath string) bool {
