@@ -20,4 +20,5 @@ const (
 	CLOUD_OBJECT	  byte = 13
 	CLOUD_ITEMS       byte = 14
 	STACKDRIVER       byte = 15
+	AZUREMETRIC       byte = 16
 )
