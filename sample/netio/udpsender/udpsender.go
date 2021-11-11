@@ -2,6 +2,7 @@ package udpsender
 
 import (
 	"container/list"
+	"github.com/scouter-project/scouter-go-lib/common/util"
 	"github.com/scouter-project/scouter-go-lib/sample/netio/udpclient"
 	"sync"
 	"time"
@@ -10,7 +11,6 @@ import (
 	"github.com/scouter-project/scouter-go-lib/common/factory/channelfactory"
 	"github.com/scouter-project/scouter-go-lib/common/logger"
 	"github.com/scouter-project/scouter-go-lib/common/netdata"
-
 )
 
 var once sync.Once
@@ -20,6 +20,7 @@ type UDPSender struct {
 	running    bool
 	udpClient  *udpclient.UDPClient
 }
+
 var conf = configure.GetConfigure()
 var udpSender *UDPSender
 
@@ -28,8 +29,8 @@ func GetInstance() *UDPSender {
 		udpSender = new(UDPSender)
 		udpSender.udpChannel = channelfactory.GetUDPChannel()
 		udpSender.running = true
-		udpSender.udpClient = udpclient.New(conf.ReadStringValue("net_collector_ip","127.0.0.1"), conf.ReadIntValue("net_udp_port",6000))
-		udpSender.udpClient.SetUDPMaxBytes(conf.ReadIntValue("net_udp_max_bytes",65535))
+		udpSender.udpClient = udpclient.New(conf.ReadStringValue("net_collector_ip", "127.0.0.1"), conf.ReadIntValue("net_udp_port", 6000))
+		udpSender.udpClient.SetUDPMaxBytes(conf.ReadIntValue("net_udp_max_bytes", 65535))
 		udpSender.running = true
 		go udpSender.run()
 	})
@@ -43,6 +44,12 @@ func (udpSender *UDPSender) AddPack(pack netdata.Pack) {
 	default:
 		logger.Warning.Println("udp channel is full.")
 	}
+}
+
+func (udpSender *UDPSender) SendText(value string) int32 {
+	bytes := []byte(value)
+	udpSender.udpClient.WriteBuffer(bytes)
+	return util.HashString(value)
 }
 
 func (udpSender *UDPSender) AddBuffer(buffer []byte) {
@@ -81,7 +88,7 @@ func (udpSender *UDPSender) send(size int) {
 	bytes := 0
 	for i := 0; i < size; i++ {
 		buffer := <-udpSender.udpChannel
-		if bytes+len(buffer) >= conf.ReadIntValue("net_udp_max_bytes",65535) {
+		if bytes+len(buffer) >= conf.ReadIntValue("net_udp_max_bytes", 65535) {
 			udpSender.sendList(bufferList)
 			bytes = 0
 			bufferList.Init()
