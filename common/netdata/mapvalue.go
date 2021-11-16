@@ -131,7 +131,6 @@ func (mapValue *MapValue) GetInt64(key string) int64 {
 	return 0
 }
 
-
 func (mapValue *MapValue) GetListValue(key string) *ListValue {
 	v, ok := mapValue.Table[key].(*ListValue)
 	if ok {
@@ -140,6 +139,13 @@ func (mapValue *MapValue) GetListValue(key string) *ListValue {
 	return nil
 }
 
+func (mapValue *MapValue) GetMapValue(key string) *MapValue {
+	v, ok := mapValue.Table[key].(*MapValue)
+	if ok {
+		return v
+	}
+	return nil
+}
 
 // ToString returns converted string map data
 func (mapValue *MapValue) ToString() string {
