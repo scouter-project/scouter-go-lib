@@ -22,5 +22,5 @@ const (
 	STACKDRIVER       byte = 15
 	XRAY_HEATMAP      byte = 16
 	AWS_LAMBDA        byte = 17
-	AZUREMETRIC       byte = 16
+	AZUREMETRIC       byte = 30
 )
