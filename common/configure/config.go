@@ -11,9 +11,9 @@ import (
 )
 
 type Configure struct {
-	confMap map[string] string
-	configFile string
-	filesize int64
+	confMap          map[string]string
+	configFile       string
+	filesize         int64
 	fileModifiedtime time.Time
 }
 
@@ -72,9 +72,9 @@ func Stop() {
 }
 
 func (c *Configure) LoadEnv() {
-	for _,v := range os.Environ() {
-		pair := strings.Split(v,"=")
-		c.confMap[pair[0]]  = pair[1]
+	for _, v := range os.Environ() {
+		pair := strings.Split(v, "=")
+		c.confMap[pair[0]] = pair[1]
 	}
 }
 
@@ -82,15 +82,15 @@ func (c *Configure) Put(key string, value string) {
 	c.confMap[key] = value
 }
 
-func (c *Configure) Get(key string ) string  {
+func (c *Configure) Get(key string) string {
 	if value, ok := c.confMap[key]; ok {
 		return value
 	}
 	return ""
 
 }
-func (c *Configure) loadFile() (err error){
-	file, err := os.OpenFile(c.configFile,os.O_RDONLY,os.ModePerm)
+func (c *Configure) loadFile() (err error) {
+	file, err := os.OpenFile(c.configFile, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return err
 	}
@@ -98,29 +98,30 @@ func (c *Configure) loadFile() (err error){
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if pos := strings.Index(line,"="); pos >= 0 {
-			key := strings.TrimSpace(line[:pos]);
-			if len(key) > 0 {
+		if pos := strings.Index(line, "="); pos >= 0 {
+			key := strings.TrimSpace(line[:pos])
+			// 주석처리된 라인은 config에서 제외
+			if len(key) > 0 && !strings.HasPrefix(key, "#") {
 				value := ""
 				if len(line) > pos {
-					value = line[pos + 1:]
+					value = line[pos+1:]
 				}
-				c.Put(key,value)
+				c.Put(key, value)
 			}
 		}
 	}
-	return  nil
+	return nil
 }
 
 // conf 파일에 파라미터 추가
 func (c *Configure) Append(key string, value string) error {
 	if _, ok := c.confMap[key]; !ok {
-		file, err := os.OpenFile(c.configFile,os.O_APPEND,os.ModePerm)
+		file, err := os.OpenFile(c.configFile, os.O_APPEND, os.ModePerm)
 		if err != nil {
 			return err
 		}
 		defer file.Close()
-		file.WriteString("\n"+key+"="+value)
+		file.WriteString("\n" + key + "=" + value)
 		file.Sync()
 		c.Put(key, value)
 	}
@@ -128,7 +129,7 @@ func (c *Configure) Append(key string, value string) error {
 }
 
 // ReadStringValue returns string type config value
-func (c *Configure) ReadStringValue(key string , def string) string {
+func (c *Configure) ReadStringValue(key string, def string) string {
 	value := c.Get(key)
 	if value == "" {
 		return def
@@ -155,7 +156,7 @@ func (c *Configure) ReadBoolValue(key string, def bool) bool {
 	if v == "" {
 		return def
 	}
-	value, err := strconv.ParseBool(v )
+	value, err := strconv.ParseBool(v)
 	if err != nil {
 		return false
 	}
@@ -167,7 +168,6 @@ func (c *Configure) loadConfig() {
 	if c.checkFile(c.configFile) {
 		c.loadFile()
 	}
-
 
 }
 
