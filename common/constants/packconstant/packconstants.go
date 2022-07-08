@@ -23,4 +23,5 @@ const (
 	XRAY_HEATMAP      byte = 16
 	AWS_LAMBDA        byte = 17
 	AZUREMETRIC       byte = 30
+	CLOUD_METRIC_DATA byte = 18
 )
