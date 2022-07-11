@@ -9,8 +9,8 @@ import (
 
 type CloudMetricDataPack struct {
 	Time         int64                  `json:"time"`
-	MetricMetaID int16                  `json:"metricMetaId"`
-	ResourceID   int16                  `json:"resourceId"`
+	MetricMetaID int32                  `json:"metricMetaId"`
+	ResourceID   int64                  `json:"resourceId"`
 	DataPoints   *CloudMetricDataPoints `json:"dataPoints"`
 }
 
@@ -36,15 +36,15 @@ func NewCloudMetricDataPack() *CloudMetricDataPack {
 // Write will write CloudMetricDataPack to datoutputx
 func (pack *CloudMetricDataPack) Write(out *DataOutputX) {
 	out.WriteInt64(pack.Time)
-	out.WriteInt16(pack.MetricMetaID)
-	out.WriteInt16(pack.ResourceID)
+	out.WriteInt32(pack.MetricMetaID)
+	out.WriteInt64(pack.ResourceID)
 }
 
 // Read will read CloudMetricDataPack from datainputx
 func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
 	pack.Time = in.ReadInt64()
-	pack.MetricMetaID = in.ReadInt16()
-	pack.ResourceID = in.ReadInt16()
+	pack.MetricMetaID = in.ReadInt32()
+	pack.ResourceID = in.ReadInt64()
 	return pack
 }
 
