@@ -3,48 +3,36 @@ package netdata
 import (
 	"fmt"
 	packconstants "github.com/scouter-project/scouter-go-lib/common/constants/packconstant"
-	"strconv"
 	"time"
 )
 
 type CloudMetricDataPack struct {
-	Time         int64                  `json:"time"`
-	MetricMetaID int32                  `json:"metricMetaId"`
-	ResourceID   int64                  `json:"resourceId"`
-	DataPoints   *CloudMetricDataPoints `json:"dataPoints"`
-}
-
-type CloudMetricDataPoints struct {
-	Sum   float64 `json:"sum"`
-	Avg   float64 `json:"avg"`
-	Min   float64 `json:"min"`
-	Max   float64 `json:"max"`
-	Count float64 `json:"count"`
-}
-
-func NewCloudMetricDataPoints() *CloudMetricDataPoints {
-	c := new(CloudMetricDataPoints)
-	return c
+	Time         int64     `json:"time"`
+	MetricMetaID int64     `json:"metricMetaId"`
+	ResourceID   int64     `json:"resourceId"`
+	DataPoints   *MapValue `json:"dataPoints"`
 }
 
 func NewCloudMetricDataPack() *CloudMetricDataPack {
 	pack := new(CloudMetricDataPack)
-	pack.DataPoints = NewCloudMetricDataPoints()
+	pack.DataPoints = NewMapValue()
 	return pack
 }
 
 // Write will write CloudMetricDataPack to datoutputx
 func (pack *CloudMetricDataPack) Write(out *DataOutputX) {
 	out.WriteInt64(pack.Time)
-	out.WriteInt32(pack.MetricMetaID)
+	out.WriteInt64(pack.MetricMetaID)
 	out.WriteInt64(pack.ResourceID)
+	out.WriteValue(pack.DataPoints)
 }
 
 // Read will read CloudMetricDataPack from datainputx
 func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
 	pack.Time = in.ReadInt64()
-	pack.MetricMetaID = in.ReadInt32()
+	pack.MetricMetaID = in.ReadInt64()
 	pack.ResourceID = in.ReadInt64()
+	pack.DataPoints = in.ReadValue().(*MapValue)
 	return pack
 }
 
@@ -52,13 +40,9 @@ func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
 func (pack *CloudMetricDataPack) ToString() string {
 	var str string
 	str += time.UnixMilli(pack.Time).Format(time.RFC3339) + " "
-	str += fmt.Sprintf("%-20s", strconv.Itoa(int(pack.MetricMetaID)))
-	str += fmt.Sprintf("%-20s", strconv.Itoa(int(pack.ResourceID)))
-	str += "sum: " + fmt.Sprintf("%-12f", pack.DataPoints.Sum)
-	str += "avg: " + fmt.Sprintf("%-12f", pack.DataPoints.Avg)
-	str += "min: " + fmt.Sprintf("%-12f", pack.DataPoints.Min)
-	str += "max: " + fmt.Sprintf("%-12f", pack.DataPoints.Max)
-	str += "count: " + fmt.Sprintf("%-12f", pack.DataPoints.Count)
+	str += fmt.Sprintf("%-12s", pack.MetricMetaID)
+	str += fmt.Sprintf("%-12d", pack.ResourceID)
+	str += fmt.Sprintf(pack.DataPoints.ToString())
 	return str
 }
 
