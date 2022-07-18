@@ -7,13 +7,20 @@ import (
 )
 
 type CloudResourcePack struct {
-	Time             int64      `json:"time"`
-	ResourceID       int64      `json:"resourceId"`
-	ResourceFullName string     `json:"resourceFullName"`
-	ProviderID       int8       `json:"providerId"`
-	MetricMetaID     int64      `json:"metricMetaId"`
-	SystemTags       *ListValue `json:"systemTags"`
-	CustomTags       *ListValue `json:"customTags"`
+	Time             int64     `json:"time"`
+	ResourceID       int64     `json:"resourceId"`
+	ResourceFullName string    `json:"resourceFullName"`
+	ProviderID       int8      `json:"providerId"`
+	MetricMetaID     int64     `json:"metricMetaId"`
+	SystemTags       *MapValue `json:"systemTags"`
+	CustomTags       *MapValue `json:"customTags"`
+}
+
+func NewCloudResourcePack() *CloudResourcePack {
+	pack := new(CloudResourcePack)
+	pack.SystemTags = NewMapValue()
+	pack.CustomTags = NewMapValue()
+	return pack
 }
 
 // Write will write CloudResourcePack to datoutputx
@@ -34,8 +41,8 @@ func (pack *CloudResourcePack) Read(in *DataInputX) Pack {
 	pack.ResourceFullName = in.ReadString()
 	pack.ProviderID = in.ReadInt8()
 	pack.MetricMetaID = in.ReadInt64()
-	pack.SystemTags = in.ReadValue().(*ListValue)
-	pack.CustomTags = in.ReadValue().(*ListValue)
+	pack.SystemTags = in.ReadValue().(*MapValue)
+	pack.CustomTags = in.ReadValue().(*MapValue)
 	return pack
 }
 
