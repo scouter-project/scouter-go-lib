@@ -21,17 +21,17 @@ func NewCloudMetricDataPack() *CloudMetricDataPack {
 
 // Write will write CloudMetricDataPack to datoutputx
 func (pack *CloudMetricDataPack) Write(out *DataOutputX) {
-	out.WriteInt64(pack.Time)
-	out.WriteInt64(pack.MetricMetaID)
-	out.WriteInt64(pack.ResourceID)
+	out.WriteDecimal(pack.MetricMetaID)
+	out.WriteDecimal(pack.ResourceID)
+	out.WriteDecimal(pack.Time)
 	out.WriteValue(pack.DataPoints)
 }
 
 // Read will read CloudMetricDataPack from datainputx
 func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
-	pack.Time = in.ReadInt64()
-	pack.MetricMetaID = in.ReadInt64()
-	pack.ResourceID = in.ReadInt64()
+	pack.Time = in.ReadDecimal()
+	pack.MetricMetaID = in.ReadDecimal()
+	pack.ResourceID = in.ReadDecimal()
 	pack.DataPoints = in.ReadValue().(*MapValue)
 	return pack
 }

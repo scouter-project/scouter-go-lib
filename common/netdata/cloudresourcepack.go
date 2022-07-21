@@ -25,22 +25,22 @@ func NewCloudResourcePack() *CloudResourcePack {
 
 // Write will write CloudResourcePack to datoutputx
 func (pack *CloudResourcePack) Write(out *DataOutputX) {
-	out.WriteInt64(pack.Time)
-	out.WriteInt64(pack.ResourceID)
+	out.WriteDecimal(pack.ResourceID)
 	out.WriteString(pack.ResourceFullName)
-	out.WriteInt8(pack.ProviderID)
-	out.WriteInt64(pack.MetricMetaID)
+	out.WriteDecimal(int64(pack.ProviderID))
+	out.WriteDecimal(pack.MetricMetaID)
+	out.WriteDecimal(pack.Time)
 	out.WriteValue(pack.SystemTags)
 	out.WriteValue(pack.CustomTags)
 }
 
 // Read will read CloudResourcePack from datainputx
 func (pack *CloudResourcePack) Read(in *DataInputX) Pack {
-	pack.Time = in.ReadInt64()
-	pack.ResourceID = in.ReadInt64()
+	pack.ResourceID = in.ReadDecimal()
 	pack.ResourceFullName = in.ReadString()
-	pack.ProviderID = in.ReadInt8()
-	pack.MetricMetaID = in.ReadInt64()
+	pack.ProviderID = int8(in.ReadDecimal())
+	pack.MetricMetaID = in.ReadDecimal()
+	pack.Time = in.ReadDecimal()
 	pack.SystemTags = in.ReadValue().(*MapValue)
 	pack.CustomTags = in.ReadValue().(*MapValue)
 	return pack
