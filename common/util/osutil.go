@@ -1,6 +1,7 @@
 package util
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
@@ -8,6 +9,14 @@ import (
 // GetAppPath returns current parogram path
 func GetAppPath() (string, error) {
 	c := os.Getenv("app.home")
+	if c == "" {
+		if flag.Lookup("app.home") == nil {
+			flag.StringVar(&c, "app.home", "", "application home")
+			flag.Parse()
+		} else {
+			c = flag.Lookup("app.home").Value.String()
+		}
+	}
 	var err error
 	if c == "" {
 		c, err = os.Getwd()
@@ -17,7 +26,6 @@ func GetAppPath() (string, error) {
 	}
 	return c, nil
 }
-
 
 // MakeDir makes dir given path.
 func MakeDir(path string) {
