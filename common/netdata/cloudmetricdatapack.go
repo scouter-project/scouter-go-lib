@@ -40,8 +40,8 @@ func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
 func (pack *CloudMetricDataPack) ToString() string {
 	var str string
 	str += time.UnixMilli(pack.Time).Format(time.RFC3339) + " "
-	str += fmt.Sprintf("%-12s", pack.MetricMetaID)
-	str += fmt.Sprintf("%-12d", pack.ResourceID)
+	str += fmt.Sprintf("\nMetricMetaID: %-12d", pack.MetricMetaID)
+	str += fmt.Sprintf("ResourceID: %-12d", pack.ResourceID)
 	str += fmt.Sprintf(pack.DataPoints.ToString())
 	return str
 }
