@@ -109,3 +109,7 @@ func (udpSender *UDPSender) sendList(bufferList *list.List) {
 		udpSender.udpClient.WriteBufferList(bufferList)
 	}
 }
+
+func (udpSender *UDPSender) Stop() {
+	udpSender.running = false
+}
