@@ -29,9 +29,9 @@ func (pack *CloudMetricDataPack) Write(out *DataOutputX) {
 
 // Read will read CloudMetricDataPack from datainputx
 func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
-	pack.Time = in.ReadDecimal()
 	pack.MetricMetaID = in.ReadDecimal()
 	pack.ResourceID = in.ReadDecimal()
+	pack.Time = in.ReadDecimal()
 	pack.DataPoints = in.ReadValue().(*MapValue)
 	return pack
 }
