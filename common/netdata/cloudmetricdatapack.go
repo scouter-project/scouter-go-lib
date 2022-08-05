@@ -7,10 +7,11 @@ import (
 )
 
 type CloudMetricDataPack struct {
-	Time         int64     `json:"time"`
-	MetricMetaID int64     `json:"metricMetaId"`
-	ResourceID   int64     `json:"resourceId"`
-	DataPoints   *MapValue `json:"dataPoints"`
+	MetricMetaID    int64     `json:"metricMetaId"`
+	ResourceID      int64     `json:"resourceId"`
+	Time            int64     `json:"time"`
+	CollectInterval int64     `json:"collectInterval"`
+	DataPoints      *MapValue `json:"dataPoints"`
 }
 
 func NewCloudMetricDataPack() *CloudMetricDataPack {
@@ -23,6 +24,7 @@ func NewCloudMetricDataPack() *CloudMetricDataPack {
 func (pack *CloudMetricDataPack) Write(out *DataOutputX) {
 	out.WriteDecimal(pack.MetricMetaID)
 	out.WriteDecimal(pack.ResourceID)
+	out.WriteDecimal(pack.CollectInterval)
 	out.WriteDecimal(pack.Time)
 	out.WriteValue(pack.DataPoints)
 }
@@ -32,6 +34,7 @@ func (pack *CloudMetricDataPack) Read(in *DataInputX) Pack {
 	pack.MetricMetaID = in.ReadDecimal()
 	pack.ResourceID = in.ReadDecimal()
 	pack.Time = in.ReadDecimal()
+	pack.CollectInterval = in.ReadDecimal()
 	pack.DataPoints = in.ReadValue().(*MapValue)
 	return pack
 }
@@ -41,7 +44,8 @@ func (pack *CloudMetricDataPack) ToString() string {
 	var str string
 	str += time.UnixMilli(pack.Time).Format(time.RFC3339) + " "
 	str += fmt.Sprintf("\nMetricMetaID: %-12d", pack.MetricMetaID)
-	str += fmt.Sprintf("ResourceID: %-12d", pack.ResourceID)
+	str += fmt.Sprintf("\nResourceID: %-12d", pack.ResourceID)
+	str += fmt.Sprintf("\nCollectInterval(min): %-6d", pack.CollectInterval)
 	str += fmt.Sprintf(pack.DataPoints.ToString())
 	return str
 }
