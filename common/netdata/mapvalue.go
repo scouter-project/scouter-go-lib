@@ -131,6 +131,15 @@ func (mapValue *MapValue) GetInt64(key string) int64 {
 	return 0
 }
 
+// GetFloat32 returns float32 value
+func (mapValue *MapValue) GetFloat32(key string) float32 {
+	v, ok := mapValue.Table[key].(*Float32Value)
+	if ok {
+		return float32(v.Value)
+	}
+	return 0
+}
+
 func (mapValue *MapValue) GetListValue(key string) *ListValue {
 	v, ok := mapValue.Table[key].(*ListValue)
 	if ok {
