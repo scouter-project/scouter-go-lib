@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// GetAppPath returns current parogram path
+// GetAppPath returns current program path
 func GetAppPath() (string, error) {
 	c := os.Getenv("app.home")
 	if c == "" {

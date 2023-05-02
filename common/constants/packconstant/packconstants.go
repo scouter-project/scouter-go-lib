@@ -25,4 +25,6 @@ const (
 	AZUREMETRIC         byte = 30
 	CLOUD_RESOURCE_DATA byte = 18
 	CLOUD_METRIC_DATA   byte = 19
+	K8S_CONTAINER       byte = 1
+	K8S_NODE            byte = 2
 )
