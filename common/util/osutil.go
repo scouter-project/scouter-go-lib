@@ -12,7 +12,7 @@ func GetAppPath() (string, error) {
 	if c == "" {
 		if flag.Lookup("app.home") == nil {
 			flag.StringVar(&c, "app.home", "", "application home")
-			flag.Parse()
+			//flag.Parse()
 		} else {
 			c = flag.Lookup("app.home").Value.String()
 		}

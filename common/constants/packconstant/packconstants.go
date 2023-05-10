@@ -9,6 +9,7 @@ const (
 	XLOG_PROFILE        byte = 26
 	XLOG_PROFILE2       byte = 27
 	TEXT                byte = 50
+	METRIC              byte = 59
 	PERFCOUNTER         byte = 60
 	PERF_STATUS         byte = 61
 	PERFCOUNTER_K8S     byte = 65
@@ -27,4 +28,5 @@ const (
 	CLOUD_METRIC_DATA   byte = 19
 	K8S_CONTAINER       byte = 1
 	K8S_NODE            byte = 2
+	K8S_NAMESPACE       byte = 3
 )
