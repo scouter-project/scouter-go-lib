@@ -8,6 +8,7 @@ import (
 type K8SNamespacePack struct {
 	SiteID        string
 	ClusterName   string
+	ClusterHash   int32
 	NamespaceName string
 	ObjHash       int32
 	Alive         bool
@@ -27,6 +28,7 @@ func (pack *K8SNamespacePack) ToString() string {
 func (pack *K8SNamespacePack) Write(out *DataOutputX) {
 	out.WriteString(pack.SiteID)
 	out.WriteString(pack.ClusterName)
+	out.WriteInt32(pack.ClusterHash)
 	out.WriteString(pack.NamespaceName)
 	out.WriteInt32(pack.ObjHash)
 	out.WriteBoolean(pack.Alive)
@@ -37,6 +39,7 @@ func (pack *K8SNamespacePack) Write(out *DataOutputX) {
 func (pack *K8SNamespacePack) Read(in *DataInputX) Pack {
 	pack.SiteID = in.ReadString()
 	pack.ClusterName = in.ReadString()
+	pack.ClusterHash = in.ReadInt32()
 	pack.NamespaceName = in.ReadString()
 	pack.ObjHash = in.ReadInt32()
 	pack.Alive = in.ReadBoolean()

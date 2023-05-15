@@ -9,6 +9,7 @@ import (
 type K8SContainerPack struct {
 	SiteID        string
 	ClusterName   string
+	ClusterHash   int32
 	NodeName      string
 	Namespace     string
 	PodName       string
@@ -36,6 +37,7 @@ func NewK8sContainerPack() *K8SContainerPack {
 func (pack *K8SContainerPack) Write(out *DataOutputX) {
 	out.WriteString(pack.SiteID)
 	out.WriteString(pack.ClusterName)
+	out.WriteInt32(pack.ClusterHash)
 	out.WriteString(pack.NodeName)
 	out.WriteString(pack.Namespace)
 	out.WriteString(pack.PodName)
@@ -57,6 +59,7 @@ func (pack *K8SContainerPack) Write(out *DataOutputX) {
 func (pack *K8SContainerPack) Read(in *DataInputX) Pack {
 	pack.SiteID = in.ReadString()
 	pack.ClusterName = in.ReadString()
+	pack.ClusterHash = in.ReadInt32()
 	pack.NodeName = in.ReadString()
 	pack.Namespace = in.ReadString()
 	pack.PodName = in.ReadString()

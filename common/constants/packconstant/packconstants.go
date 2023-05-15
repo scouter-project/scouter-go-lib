@@ -29,4 +29,6 @@ const (
 	K8S_CONTAINER       byte = 1
 	K8S_NODE            byte = 2
 	K8S_NAMESPACE       byte = 3
+	K8S_WATCH_PACK      byte = 4
+	K8S_CLUSTER_PACK    byte = 5
 )

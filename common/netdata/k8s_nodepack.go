@@ -7,19 +7,25 @@ import (
 )
 
 type K8SNodePack struct {
-	SiteID         string
-	ClusterName    string
-	ObjHash        int32
-	NodeName       string
-	Alive          bool
-	WakeUp         int64
-	CpuCapacity    int64
-	MemCapacity    int64
-	CpuUsedPct     int32
-	MemUsedPct     int32
-	CpuAllocatable int64
-	MemAllocatable int64
-	Tags           *MapValue
+	SiteID                 string
+	ClusterName            string
+	ClusterHash            int32
+	ObjHash                int32
+	NodeName               string
+	Alive                  bool
+	WakeUp                 int64
+	CpuCapacity            int64
+	MemCapacity            int64
+	CpuUsedPct             int32
+	MemUsedPct             int32
+	CpuAllocatable         int64
+	MemAllocatable         int64
+	NodeReady              int8 // 1 : True, 0 : False, 2 : Unknown
+	NodeMemoryPressure     int8 // 1 : True, 0 : False, 2 : Unknown
+	NodeDiskPressure       int8 // 1 : True, 0 : False, 2 : Unknown
+	NodePIDPressure        int8 // 1 : True, 0 : False, 2 : Unknown
+	NodeNetworkUnavailable int8 // 1 : True, 0 : False, 2 : Unknown
+	Tags                   *MapValue
 }
 
 func (pack *K8SNodePack) ToString() string {
@@ -46,6 +52,7 @@ func (pack *K8SNodePack) ToString() string {
 func (pack *K8SNodePack) Write(out *DataOutputX) {
 	out.WriteString(pack.SiteID)
 	out.WriteString(pack.ClusterName)
+	out.WriteInt32(pack.ClusterHash)
 	out.WriteInt32(pack.ObjHash)
 	out.WriteString(pack.NodeName)
 	out.WriteBoolean(pack.Alive)
@@ -56,12 +63,18 @@ func (pack *K8SNodePack) Write(out *DataOutputX) {
 	out.WriteInt32(pack.MemUsedPct)
 	out.WriteDecimal(pack.CpuAllocatable)
 	out.WriteDecimal(pack.MemAllocatable)
+	out.WriteInt8(pack.NodeReady)
+	out.WriteInt8(pack.NodeMemoryPressure)
+	out.WriteInt8(pack.NodeDiskPressure)
+	out.WriteInt8(pack.NodePIDPressure)
+	out.WriteInt8(pack.NodeNetworkUnavailable)
 	out.WriteValue(pack.Tags)
 }
 
 func (pack *K8SNodePack) Read(in *DataInputX) Pack {
 	pack.SiteID = in.ReadString()
 	pack.ClusterName = in.ReadString()
+	pack.ClusterHash = in.ReadInt32()
 	pack.ObjHash = in.ReadInt32()
 	pack.NodeName = in.ReadString()
 	pack.Alive = in.ReadBoolean()
@@ -72,6 +85,11 @@ func (pack *K8SNodePack) Read(in *DataInputX) Pack {
 	pack.MemUsedPct = in.ReadInt32()
 	pack.CpuAllocatable = in.ReadDecimal()
 	pack.MemAllocatable = in.ReadDecimal()
+	pack.NodeReady = in.ReadInt8()
+	pack.NodeMemoryPressure = in.ReadInt8()
+	pack.NodeDiskPressure = in.ReadInt8()
+	pack.NodePIDPressure = in.ReadInt8()
+	pack.NodeNetworkUnavailable = in.ReadInt8()
 	pack.Tags = in.ReadValue().(*MapValue)
 	return pack
 }
