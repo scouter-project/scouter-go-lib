@@ -64,5 +64,5 @@ func (pack *AlertPack2) ToString() string {
 }
 
 func (pack *AlertPack2) GetPackType() byte {
-	return packconstants.ALERT
+	return packconstants.ALERT2
 }

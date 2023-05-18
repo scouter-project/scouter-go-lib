@@ -15,6 +15,7 @@ const (
 	PERFCOUNTER_K8S     byte = 65
 	K8S_CLUSTER__INFO   byte = 66
 	ALERT               byte = 70
+	ALERT2              byte = 71
 	OBJECT              byte = 80
 	CLOUD_WATCH         byte = 11
 	XRay                byte = 12
