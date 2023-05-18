@@ -10,6 +10,7 @@ type AlertPack2 struct {
 	Time      int64
 	AlertType int16
 	ObjType   string
+	ObjHash   int32
 	Level     int8
 	Title     string
 	Message   string
@@ -25,8 +26,9 @@ func NewAlertPack2() *AlertPack2 {
 func (pack *AlertPack2) Write(out *DataOutputX) {
 	out.WriteInt64(pack.Time)
 	out.WriteInt16(pack.AlertType)
-	out.WriteString(pack.ObjType)
 	out.WriteInt8(pack.Level)
+	out.WriteString(pack.ObjType)
+	out.WriteInt32(pack.ObjHash)
 	out.WriteString(pack.Title)
 	out.WriteString(pack.Message)
 	out.WriteValue(pack.Tags)
@@ -35,8 +37,9 @@ func (pack *AlertPack2) Write(out *DataOutputX) {
 func (pack *AlertPack2) Read(in *DataInputX) Pack {
 	pack.Time = in.ReadInt64()
 	pack.AlertType = in.ReadInt16()
-	pack.ObjType = in.ReadString()
 	pack.Level = in.ReadInt8()
+	pack.ObjType = in.ReadString()
+	pack.ObjHash = in.ReadInt32()
 	pack.Title = in.ReadString()
 	pack.Message = in.ReadString()
 	pack.Tags = in.ReadValue().(*MapValue)
