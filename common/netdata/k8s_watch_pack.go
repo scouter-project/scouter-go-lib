@@ -5,31 +5,19 @@ import (
 )
 
 type K8SWatchPack struct {
-	SiteID      string
-	ClusterName string
 	ClusterHash int32
-	ObjName     string
-	ObjHash     int32
 	WatchType   byte
 	Data        *MapValue
 }
 
 func (pack *K8SWatchPack) Write(out *DataOutputX) {
-	out.WriteString(pack.SiteID)
-	out.WriteString(pack.ClusterName)
 	out.WriteInt32(pack.ClusterHash)
-	out.WriteString(pack.ObjName)
-	out.WriteInt32(pack.ObjHash)
 	out.WriteInt8(int8(pack.WatchType))
 	out.WriteValue(pack.Data)
 }
 
 func (pack *K8SWatchPack) Read(in *DataInputX) Pack {
-	pack.SiteID = in.ReadString()
-	pack.ClusterName = in.ReadString()
 	pack.ClusterHash = in.ReadInt32()
-	pack.ObjName = in.ReadString()
-	pack.ObjHash = in.ReadInt32()
 	pack.WatchType = byte(in.ReadInt8())
 	pack.Data = in.ReadValue().(*MapValue)
 	return pack

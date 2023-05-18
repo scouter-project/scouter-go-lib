@@ -20,7 +20,7 @@ type K8SNodePack struct {
 	MemUsedPct             int32
 	CpuAllocatable         int64
 	MemAllocatable         int64
-	NodeReady              int8 // 1 : True, 0 : False, 2 : Unknown
+	NodeReady              string
 	NodeMemoryPressure     int8 // 1 : True, 0 : False, 2 : Unknown
 	NodeDiskPressure       int8 // 1 : True, 0 : False, 2 : Unknown
 	NodePIDPressure        int8 // 1 : True, 0 : False, 2 : Unknown
@@ -63,7 +63,7 @@ func (pack *K8SNodePack) Write(out *DataOutputX) {
 	out.WriteInt32(pack.MemUsedPct)
 	out.WriteDecimal(pack.CpuAllocatable)
 	out.WriteDecimal(pack.MemAllocatable)
-	out.WriteInt8(pack.NodeReady)
+	out.WriteString(pack.NodeReady)
 	out.WriteInt8(pack.NodeMemoryPressure)
 	out.WriteInt8(pack.NodeDiskPressure)
 	out.WriteInt8(pack.NodePIDPressure)
@@ -85,7 +85,7 @@ func (pack *K8SNodePack) Read(in *DataInputX) Pack {
 	pack.MemUsedPct = in.ReadInt32()
 	pack.CpuAllocatable = in.ReadDecimal()
 	pack.MemAllocatable = in.ReadDecimal()
-	pack.NodeReady = in.ReadInt8()
+	pack.NodeReady = in.ReadString()
 	pack.NodeMemoryPressure = in.ReadInt8()
 	pack.NodeDiskPressure = in.ReadInt8()
 	pack.NodePIDPressure = in.ReadInt8()

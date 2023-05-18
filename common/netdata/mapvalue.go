@@ -4,12 +4,12 @@ import (
 	valueconstants "github.com/scouter-project/scouter-go-lib/common/constants/valueconstant"
 )
 
-//MapValue has map data
+// MapValue has map data
 type MapValue struct {
 	Table map[string]Value
 }
 
-//NewMapValue returns new MapValue instance
+// NewMapValue returns new MapValue instance
 func NewMapValue() *MapValue {
 	mapValue := new(MapValue)
 	mapValue.Table = make(map[string]Value)
@@ -154,6 +154,10 @@ func (mapValue *MapValue) GetMapValue(key string) *MapValue {
 		return v
 	}
 	return nil
+}
+
+func (mapValue *MapValue) Size() int {
+	return len(mapValue.Table)
 }
 
 // ToString returns converted string map data

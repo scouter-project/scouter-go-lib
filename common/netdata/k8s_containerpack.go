@@ -25,6 +25,7 @@ type K8SContainerPack struct {
 	MemUsed       int64
 	Alive         bool
 	Wakeup        int64
+	Status        int8
 	Tags          *MapValue
 }
 
@@ -53,6 +54,7 @@ func (pack *K8SContainerPack) Write(out *DataOutputX) {
 	out.WriteDecimal(pack.MemUsed)
 	out.WriteBoolean(pack.Alive)
 	out.WriteInt64(pack.Wakeup)
+	out.WriteInt8(pack.Status)
 	out.WriteValue(pack.Tags)
 }
 
@@ -75,6 +77,7 @@ func (pack *K8SContainerPack) Read(in *DataInputX) Pack {
 	pack.MemUsed = in.ReadDecimal()
 	pack.Alive = in.ReadBoolean()
 	pack.Wakeup = in.ReadInt64()
+	pack.Status = in.ReadInt8()
 	pack.Tags = in.ReadValue().(*MapValue)
 	return pack
 }
