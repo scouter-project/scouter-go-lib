@@ -15,6 +15,11 @@ type K8SContainerPack struct {
 	PodName       string
 	PodID         string
 	Deployment    string
+	DaemonSet     string
+	StatefulSet   string
+	ReplicaSet    string
+	Job           string
+	CronJob       string
 	ContainerName string
 	ObjHash       int32
 	CpuLimit      int64
@@ -44,6 +49,11 @@ func (pack *K8SContainerPack) Write(out *DataOutputX) {
 	out.WriteString(pack.PodName)
 	out.WriteString(pack.PodID)
 	out.WriteString(pack.Deployment)
+	out.WriteString(pack.DaemonSet)
+	out.WriteString(pack.StatefulSet)
+	out.WriteString(pack.ReplicaSet)
+	out.WriteString(pack.Job)
+	out.WriteString(pack.CronJob)
 	out.WriteString(pack.ContainerName)
 	out.WriteInt32(pack.ObjHash)
 	out.WriteDecimal(pack.CpuLimit)
@@ -67,6 +77,11 @@ func (pack *K8SContainerPack) Read(in *DataInputX) Pack {
 	pack.PodName = in.ReadString()
 	pack.PodID = in.ReadString()
 	pack.Deployment = in.ReadString()
+	pack.DaemonSet = in.ReadString()
+	pack.StatefulSet = in.ReadString()
+	pack.ReplicaSet = in.ReadString()
+	pack.Job = in.ReadString()
+	pack.CronJob = in.ReadString()
 	pack.ContainerName = in.ReadString()
 	pack.ObjHash = in.ReadInt32()
 	pack.CpuLimit = in.ReadDecimal()
@@ -84,34 +99,25 @@ func (pack *K8SContainerPack) Read(in *DataInputX) Pack {
 
 func (pack *K8SContainerPack) ToString() string {
 	var buf bytes.Buffer
-	buf.WriteString("cluster name: ")
-	buf.WriteString(pack.ClusterName + "\n")
-	buf.WriteString("node name: ")
-	buf.WriteString(pack.NodeName + "\n")
-	buf.WriteString("namespace: ")
-	buf.WriteString(pack.Namespace + "\n")
-	buf.WriteString("deployment: ")
-	buf.WriteString(pack.Deployment + "\n")
-	buf.WriteString("pod id: ")
-	buf.WriteString(pack.PodID + "\n")
-	buf.WriteString("pod name: ")
-	buf.WriteString(pack.PodName + "\n")
-	buf.WriteString("container name: ")
-	buf.WriteString(pack.ContainerName + "\n")
-	buf.WriteString("object hash: ")
-	buf.WriteString(strconv.Itoa(int(pack.ObjHash)) + "\n")
-	buf.WriteString("CPU limit: ")
-	buf.WriteString(strconv.FormatInt(pack.CpuLimit, 10) + "\n")
-	buf.WriteString("CPU request: ")
-	buf.WriteString(strconv.FormatInt(pack.CpuRequest, 10) + "\n")
-	buf.WriteString("CPU used: ")
-	buf.WriteString(strconv.FormatInt(pack.CpuUsed, 10) + "\n")
-	buf.WriteString("MEM limit: ")
-	buf.WriteString(strconv.FormatInt(pack.MemLimit, 10) + "\n")
-	buf.WriteString("MEM request: ")
-	buf.WriteString(strconv.FormatInt(pack.MemRequest, 10) + "\n")
-	buf.WriteString("MEM used: ")
-	buf.WriteString(strconv.FormatInt(pack.MemUsed, 10) + "\n")
+	buf.WriteString("cluster name: " + pack.ClusterName + "\n")
+	buf.WriteString("node name: " + pack.NodeName + "\n")
+	buf.WriteString("namespace: " + pack.Namespace + "\n")
+	buf.WriteString("pod id: " + pack.PodID + "\n")
+	buf.WriteString("pod name: " + pack.PodName + "\n")
+	buf.WriteString("container name: " + pack.ContainerName + "\n")
+	buf.WriteString("deployment: " + pack.Deployment + "\n")
+	buf.WriteString("statefulset: " + pack.StatefulSet + "\n")
+	buf.WriteString("daemonset: " + pack.DaemonSet + "\n")
+	buf.WriteString("replicaset: " + pack.ReplicaSet + "\n")
+	buf.WriteString("job: " + pack.Job + "\n")
+	buf.WriteString("cron job: " + pack.CronJob + "\n")
+	buf.WriteString("object hash: " + strconv.Itoa(int(pack.ObjHash)) + "\n")
+	buf.WriteString("CPU limit: " + strconv.FormatInt(pack.CpuLimit, 10) + "\n")
+	buf.WriteString("CPU request: " + strconv.FormatInt(pack.CpuRequest, 10) + "\n")
+	buf.WriteString("CPU used: " + strconv.FormatInt(pack.CpuUsed, 10) + "\n")
+	buf.WriteString("MEM limit: " + strconv.FormatInt(pack.MemLimit, 10) + "\n")
+	buf.WriteString("MEM request: " + strconv.FormatInt(pack.MemRequest, 10) + "\n")
+	buf.WriteString("MEM used: " + strconv.FormatInt(pack.MemUsed, 10) + "\n")
 	return buf.String()
 }
 
