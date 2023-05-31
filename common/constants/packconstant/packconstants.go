@@ -32,4 +32,6 @@ const (
 	K8S_NAMESPACE       byte = 3
 	K8S_WATCH_PACK      byte = 4
 	K8S_CLUSTER_PACK    byte = 5
+
+	K8S_EVENT_PACK byte = 6
 )
