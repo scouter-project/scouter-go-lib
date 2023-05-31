@@ -10,10 +10,7 @@ import (
 func GetAppPath() (string, error) {
 	c := os.Getenv("app.home")
 	if c == "" {
-		if flag.Lookup("app.home") == nil {
-			flag.StringVar(&c, "app.home", "", "application home")
-			//flag.Parse()
-		} else {
+		if flag.Lookup("app.home") != nil {
 			c = flag.Lookup("app.home").Value.String()
 		}
 	}

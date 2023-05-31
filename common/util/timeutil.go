@@ -9,7 +9,7 @@ var secondsPerMin = int64(60)
 var secondsPerHour = int64(60 * secondsPerMin)
 var secondsPerDay = int64(24 * secondsPerHour)
 
-//GetDuration returns long to string format
+// GetDuration returns long to string format
 func GetDuration(seconds int64) string {
 	day := seconds / secondsPerDay
 	hour := (seconds - (day * secondsPerDay)) / secondsPerHour
@@ -27,5 +27,11 @@ func MillisToNow(from time.Time) int32 {
 }
 
 func TimeIsZero(t time.Time) bool {
-	return t.Year() == 0001 &&  t.Hour() == 0 && t.Second() == 0 && t.Nanosecond() == 0
+	return t.Year() == 0001 && t.Hour() == 0 && t.Second() == 0 && t.Nanosecond() == 0
+}
+
+func CurrentYYMMDD() string {
+	t := time.Now()
+	return fmt.Sprintf("%d%02d%02d", t.Year(), t.Month(), t.Day())
+
 }
